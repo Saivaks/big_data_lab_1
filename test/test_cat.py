@@ -3,7 +3,7 @@ import os
 import configparser
 import os
 config = configparser.ConfigParser()
-config.read('config.ini', encoding="utf-8")
+config.read('../config.ini', encoding="utf-8")
 path_data = config['DATA']['path_test_data']
 path_result = config['DATA']['path_test_result']
 df_orig = pd.read_csv(os.path.join(path_data, 'BBC News Train test.csv'))
