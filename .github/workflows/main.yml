@@ -31,4 +31,4 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_SAIVAKS }}/test:latest
       - 
         name: Test cl
-        uses: ./.github/workflows/cl
+        uses: .github/workflows/cl
