@@ -1,4 +1,4 @@
-name: Build and Test
+name: Test
 
 #on:
 #  push:
@@ -6,10 +6,11 @@ name: Build and Test
 #  pull_request:
 #    branches: [main]
 
-jobs:
+#jobs:
+runs:
+  using: "composite"
   test:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
