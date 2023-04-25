@@ -5,7 +5,9 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD ["python3", "big-data.py"]
-CMD ["python3", "test/test_cat.py"]
-CMD ["python3", "test/test_len.py"]
-CMD ["python3", "test/test_type.py"]
+run ["python", "process_data.py"]
+run ["python", "train_model.py"]
+run ["python", "test_model.py"]
+run ["python", "test/test_cat.py"]
+run ["python", "test/test_len.py"]
+run ["python", "test/test_type.py"]
