@@ -9,25 +9,23 @@ name: Test
 #jobs:
 runs:
   using: "composite"
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Run docker
-      run: docker-compose up --build
-    - name: Set up Python Environment
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r test/requirements.txt
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
+  - name: Run docker
+    run: docker-compose up --build
+  - name: Set up Python Environment
+    uses: actions/setup-python@v2
+    with:
+      python-version: '3.9'
+  - name: Install Dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install -r test/requirements.txt
   
-    - name: Run Tests
-      run: |
-        pytest test/test_cat.py
-        pytest test/test_len.py
-        pytest test/test_type.py
+  - name: Run Tests
+    run: |
+      pytest test/test_cat.py
+      pytest test/test_len.py
+      pytest test/test_type.py
         
