@@ -11,17 +11,17 @@ runs:
   using: "composite"
   #runs-on: ubuntu-latest
   steps:
-  - name: Checkout code
-    shell: bash
-    uses: actions/checkout@v3
+  #- name: Checkout code
+    #shell: bash
+    #uses: actions/checkout@v3
   - name: Run docker
     shell: bash
     run: docker-compose up --build
-  - name: Set up Python Environment
-    shell: bash
-    uses: actions/setup-python@v2
-    with:
-      python-version: '3.9'
+  #- name: Set up Python Environment
+  #  shell: bash
+  #  uses: actions/setup-python@v2
+  #  with:
+  #    python-version: '3.9'
   - name: Install Dependencies
     shell: bash
     run: |
