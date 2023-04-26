@@ -10,8 +10,8 @@ name: Test
 runs:
   using: "composite"
   env:
-    username: ${{ username }}
-    port: ${{ port }}
+    username: ${{ username_sec }}
+    port: ${{ port_sec }}
   #runs-on: ubuntu-latest
   steps:
   #- name: Checkout code

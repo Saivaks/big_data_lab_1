@@ -33,9 +33,9 @@ jobs:
         name: Test cl
         uses: ./.github/workflows/cd
         with:
-          #envkey_DEBUG: false
-          username: ${{ secrets.MASTER_SLAVE}}
-          port: ${{ secrets.OPEN_PORT}}
+          envkey_DEBUG: false
+          username_sec: ${{ secrets.MASTER_SLAVE}}
+          port_sec: ${{ secrets.OPEN_PORT}}
           some_other_variable: foobar
           directory: <directory_name>
           file_name: .env
