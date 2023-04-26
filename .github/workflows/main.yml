@@ -32,3 +32,6 @@ jobs:
       - 
         name: Test cl
         uses: ./.github/workflows/cd
+        with:
+          username: ${{ secrets.MASTER_SLAVE}}
+          port: ${{ secrets.OPEN_PORT}}

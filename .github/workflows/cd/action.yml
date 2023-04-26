@@ -10,8 +10,8 @@ name: Test
 runs:
   using: "composite"
   env:
-    username: ${{ secrets.MASTER_SLAVE}}
-    port: ${{ secrets.OPEN_PORT}}
+    username: ${{ username }}
+    port: ${{ port }}
   #runs-on: ubuntu-latest
   steps:
   #- name: Checkout code
