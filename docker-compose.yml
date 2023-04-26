@@ -1,6 +1,24 @@
 version: '3.7'
 
 services:
+  baza:
+    container_name: fundament
+    #image: microsoft/mssql-server-linux:2019-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - ./data:/var/opt/mssql/data
+    #  - ./log:./data/log
+    #  - ./secrets:./data/secrets
+    #expose:
+    #  - "9000"
+    #  - "9001"
+    ports:
+      - ${port}: ${port}
+      #- "9001:9001" 
+    environment:
+      MSSQL_SA_PASSWORD: ${username}
+      ACCEPT_EULA: "Y"
+    #command: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -d msdb -P 12345And -i /var/opt/mssql/data/beton.sql
   app:
     build: .
     volumes:
