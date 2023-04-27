@@ -30,13 +30,23 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_SAIVAKS }}/test:latest
       - 
-        name: Test cl
-        uses: ./.github/workflows/cd
-        with:
-          envkey_DEBUG: false
-          username_sec: ${{ secrets.MASTER_SLAVE}}
-          port_sec: ${{ secrets.OPEN_PORT}}
-          some_other_variable: foobar
-          directory: <directory_name>
-          file_name: .env
-          fail_on_empty: false
+        #name: Test cl
+        #uses: ./.github/workflows/cd
+        #with:
+        #  envkey_DEBUG: false
+        #  username_sec: ${{ secrets.MASTER_SLAVE}}
+        #  port_sec: ${{ secrets.OPEN_PORT}}
+        #  some_other_variable: foobar
+        # directory: <directory_name>
+        #  file_name: .env
+        #  fail_on_empty: false
+  cl:
+    runs-on: ubuntu-latest
+    env:
+      username: ${{ secrets.MASTER_SLAVE }}
+      port: ${{ secrets.OPEN_PORT }}
+    steps:
+      -
+        name: Run docker
+        shell: bash
+        run: docker-compose up --build
