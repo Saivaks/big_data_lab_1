@@ -7,8 +7,6 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
       - ./data:/var/opt/mssql/data
-    #  - ./log:./data/log
-    #  - ./secrets:./data/secrets
     #expose:
     #  - "9000"
     #  - "9001"
