@@ -11,8 +11,8 @@ services:
     #  - "9000"
     #  - "9001"
     ports:
-      - "1433": ${port}
-      #- "9001:9001" 
+      - "1433": "1433"
+      #- "${port}:${port}" 
     environment:
       MSSQL_SA_PASSWORD: ${username}
       ACCEPT_EULA: "Y"
