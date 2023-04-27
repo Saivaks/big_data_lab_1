@@ -13,7 +13,7 @@ services:
     #  - "9000"
     #  - "9001"
     ports:
-      - 1433: ${port}
+      - "1433": ${port}
       #- "9001:9001" 
     environment:
       MSSQL_SA_PASSWORD: ${username}
