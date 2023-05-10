@@ -27,12 +27,12 @@ services:
   app:
     environment:
       PASSWORD: ${pass}
-      #PASSWORD: '12345And'
       PORT: ${port}
-      #PORT: "1433"
       USER: ${user}
-      #USER: "SA"
       DB: ${name_db}
+      #PASSWORD: '12345And'
+      #PORT: "1433"
+      #USER: "SA"
       #DB: "msdb"
     build:
       context: .
