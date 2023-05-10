@@ -15,13 +15,13 @@ def procces():
 	db = 'msdb'
 	user = 'SA'
 	try:
-	conn = pyodbc.connect(DRIVER=driver, 
+		conn = pyodbc.connect(DRIVER=driver, 
                        SERVER=sercer,
                        DATABASE=db,
                        UID=user,
                        PWD=password)
-	cursor = conn.cursor()
-	cursor.execute('beton.sql')
+		cursor = conn.cursor()
+		cursor.execute('beton.sql')
 	except:
 		print('Конект к базе не произошел')
 	#print(password)
