@@ -14,23 +14,28 @@ def procces():
 	sercer = 'localhost::1433'
 	db = 'msdb'
 	user = 'SA'
+	try:
 	conn = pyodbc.connect(DRIVER=driver, 
                        SERVER=sercer,
                        DATABASE=db,
                        UID=user,
                        PWD=password)
-	#print(password)
 	cursor = conn.cursor()
 	cursor.execute('beton.sql')
+	except:
+		print('Конект к базе не произошел')
+	#print(password)
+	
+	
 	config = configparser.ConfigParser()
 	config.read('config.ini', encoding="utf-8")
 
-	#path_data = r'S:\andrey\мага\sem_2\big_data\big_data_lab_1\data'
+	path_data = r'S:\andrey\мага\sem_2\big_data\big_data_lab_1\data'
 	path_data = config['DATA']['path_data']
-	#train = pd.read_csv(os.path.join(path_data, 'BBC News Train.csv'))
-	#test = pd.read_csv(os.path.join(path_data, 'BBC News Test.csv'))
+	train = pd.read_csv(os.path.join(path_data, 'BBC News Train.csv'))
+	test = pd.read_csv(os.path.join(path_data, 'BBC News Test.csv'))
 	train = pd.read_csv(os.path.join(path_data, config['DATA']['name_train']))
-	#test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
+	test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
 	train, valid = np.split(train.sample(frac=1, random_state=322), [int(float(config['SPLIT_DATA']['size'])*len(train))])
 
 	train.to_csv('train.csv', index = False)

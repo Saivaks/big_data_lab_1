@@ -14,13 +14,26 @@ services:
       - "1433:1433"
       #- "${port}:${port}" 
     environment:
-      #MSSQL_SA_PASSWORD: ${username}
-      MSSQL_SA_PASSWORD: '12345And'
+      MSSQL_SA_PASSWORD: ${pass}
+      #MSSQL_SA_PASSWORD: '12345And'
+      PORT: ${port}
+      #PORT: "1433"
+      USER: ${user}
+      #USER: "SA"
+      DB: ${name_db}
+      #DB: "msdb"
       ACCEPT_EULA: "Y"
     #command: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -d msdb -P '12345And' -i /var/opt/mssql/data/beton.sql
   app:
     environment:
-      PASSWORD: "12345And"
+      PASSWORD: ${pass}
+      #PASSWORD: '12345And'
+      PORT: ${port}
+      #PORT: "1433"
+      USER: ${user}
+      #USER: "SA"
+      DB: ${name_db}
+      #DB: "msdb"
     build:
       context: .
       #args:

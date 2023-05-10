@@ -3,14 +3,16 @@ name: ci
 on:
   push:
     branches:
-      - "lab_2"
+      - "lab_3"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      username: ${{ secrets.MASTER_SLAVE }}
+      user: ${{ secrets.BAZA_USER }}
       port: ${{ secrets.OPEN_PORT }}
+      pass: ${{ secrets.BAZA_PASS }}
+      name_db: ${{ secrets.BAZA_DB }}
     steps:
       -
         name: Checkout
