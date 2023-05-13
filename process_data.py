@@ -8,18 +8,23 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import os
 import configparser
 import pyodbc
+import pymssql
 def procces():
 	password = os.environ['PASSWORD']
-	driver = 'SQL Server Native Client 11.0'
-	sercer = 'localhost::1433'
+	#driver = 'Driver='
+	server = r'127.0.0.1'
 	db = 'msdb'
 	user = 'SA'
-	conn = pyodbc.connect(DRIVER=driver, 
-                       SERVER=sercer,
-                       DATABASE=db,
-                       UID=user,
-                       PWD=password)
+	port = '1433'
+	#conn = pyodbc.connect(DRIVER='/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so', 
+    #                   SERVER=server,
+    #                   DATABASE=db,
+    #                   UID=user,
+    #                   PWD=password)
+	conn = pyodbc.connect(DRIVER = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so', SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
+	#conn = pyodbc.connect(DRIVER = 'ODBC Driver 18 for SQL Server', SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
 	#print(password)
+	conn = pymssql.connect(server, user, password, db)
 	cursor = conn.cursor()
 	cursor.execute('beton.sql')
 	config = configparser.ConfigParser()
