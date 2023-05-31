@@ -12,7 +12,7 @@ if __name__ == '__main__':
 	process_data.procces()
 	train_model.train()
 	test_model.test()
-
+	
 	test_cat.test1()
 	test_len.test2()
 	test_type.test3()

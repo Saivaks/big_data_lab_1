@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   baza:
-    container_name: fundament
+    #container_name: fundament
     #image: microsoft/mssql-server-linux:2019-latest
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
@@ -12,20 +12,30 @@ services:
     #  - "9001"
     ports:
       - "1433:1433"
+    #expose:
+    #  - "1433"
       #- "${port}:${port}" 
     environment:
       #MSSQL_SA_PASSWORD: ${username}
       MSSQL_SA_PASSWORD: '12345And'
       ACCEPT_EULA: "Y"
-    #command: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1::1433 -U SA -d msdb -P '12345And' -i /var/opt/mssql/data/beton.sql
-    command: tsql -C
+    #entrypoint: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -d msdb -P '12345And' -i /var/opt/mssql/data/beton.sql
+    #-i /var/opt/mssql/data/beton.sql
+    #command: tsql -C
   app:
     environment:
       PASSWORD: "12345And"
+    #depends_on: 
+    #  - "baza"
+    #ports:
+    #  - "1434:1433"
+    #links:
+    #  - "baza"
     build:
       context: .
       #args:
       #  PASSWORD: "12345And"
     volumes:
-      - .:/app 
+      - .:/app
+
     

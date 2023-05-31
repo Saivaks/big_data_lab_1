@@ -9,14 +9,30 @@ import os
 import configparser
 import pickle
 import sparse
+import pyodbc
 def test():
-    config = configparser.ConfigParser()
-    config.read('config.ini', encoding="utf-8")
+    #config = configparser.ConfigParser()
+    #config.read('config.ini', encoding="utf-8")
+    #path_data = config['DATA']['path_data']
+    #test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
+    #train = pd.read_csv('train.csv')
+    #valid = pd.read_csv('valid.csv')
 
-    path_data = config['DATA']['path_data']
-    test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
-    train = pd.read_csv('train.csv')
-    valid = pd.read_csv('valid.csv')
+    password = os.environ['PASSWORD']
+    server = 'baza'
+    db = 'msdb'
+    user = 'SA'
+    port = '1433'
+    full = r'127.0.0.1::1433'
+    driver = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so'
+
+    conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
+    cursor = conn.cursor()
+
+    test = pd.read_sql("SELECT [ArticleId], [Text] FROM test.test;", conn)
+    train = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.train_split;", conn)
+    valid = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.valid_split;", conn)
+
     train_text = train['Text']
     valid_text = valid['Text']
     test_text = test['Text']
@@ -82,7 +98,13 @@ def test():
         submission_valid.append(class_names[index])
     valid_answer = {"text": list(valid['Text']),"Category":valid_target ,"labels": submission_valid}
     res = pd.DataFrame.from_dict(valid_answer)
-    res.to_csv('result_valid.csv', index = False)
+
+    cursor.execute("TRUNCATE TABLE test.pred_valid")
+    cursor.commit()
+    for index, row in res.iterrows():
+        cursor.execute("INSERT INTO test.pred_valid (Text, Category, Labels) values(?,?,?)", row.text, row.Category, row.labels)
+    cursor.commit()
+    #res.to_csv('result_valid.csv', index = False)
 
     submission_test = []
     for ind in range(len(result)):
@@ -90,7 +112,12 @@ def test():
         submission_test.append(class_names[index])
     test_answer = {"text": list(test['Text']), "labels": submission_test}
     res = pd.DataFrame.from_dict(test_answer)
-    res.to_csv('result.csv', index = False)
 
-
+    cursor.execute("TRUNCATE TABLE test.pred_test")
+    cursor.commit()
+    for index, row in res.iterrows():
+        cursor.execute("INSERT INTO test.pred_test (Text, Category) values(?,?)", row.text, row.labels)
+    cursor.commit()
+    cursor.close()
+    #res.to_csv('result.csv', index = False)
     print("Процесс тестирования модели завершился")
