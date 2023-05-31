@@ -17,8 +17,7 @@ BEGIN
 create table test.test
 (
     ArticleId int,
-    Text text,
-    Category text
+    Text text
 );
 END
 
@@ -60,7 +59,8 @@ BEGIN
 create table test.pred_valid
 (
     Text text,
-    Category text
+    Category text,
+    Labels text
 );
 END
 

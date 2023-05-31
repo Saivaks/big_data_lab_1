@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   baza:
-    container_name: fundament
+    #container_name: fundament
     #image: microsoft/mssql-server-linux:2019-latest
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:

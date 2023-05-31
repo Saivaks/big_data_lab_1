@@ -8,16 +8,29 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import os
 import configparser
 import pickle
+import pyodbc
 from scipy import sparse
 def train():
+    password = os.environ['PASSWORD']
+    server = 'baza'
+    db = os.environ['DB']
+    user = os.environ['USER'] 
+    port = os.environ['PORT']
+    driver = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so'
+    conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
+    cursor = conn.cursor()
+
     config = configparser.ConfigParser()
     config.read('config.ini', encoding="utf-8")
-    path_data = config['DATA']['path_data']
-    test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
-    train = pd.read_csv('train.csv')
-    valid = pd.read_csv('valid.csv')
+    #path_data = config['DATA']['path_data']
+    #test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
+    #train = pd.read_csv('train.csv')
+    #valid = pd.read_csv('valid.csv')
 
-
+    test = pd.read_sql("SELECT [ArticleId], [Text] FROM test.test;", conn)
+    train = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.train_split;", conn)
+    valid = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.valid_split;", conn)
+    cursor.close()
     train_text = train['Text']
     valid_text = valid['Text']
     test_text = test['Text']
