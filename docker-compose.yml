@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   baza:
-    container_name: fundament
+    #container_name: fundament
     #image: microsoft/mssql-server-linux:2019-latest
     image: mcr.microsoft.com/mssql/server:2019-latest
     volumes:
@@ -12,6 +12,8 @@ services:
     #  - "9001"
     ports:
       - "1433:1433"
+    #expose:
+    #  - "1433"
       #- "${port}:${port}" 
     environment:
       MSSQL_SA_PASSWORD: ${pass}
@@ -23,21 +25,50 @@ services:
       DB: ${name_db}
       #DB: "msdb"
       ACCEPT_EULA: "Y"
-    #command: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -d msdb -P '12345And' -i /var/opt/mssql/data/beton.sql
+    #entrypoint: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -d msdb -P '12345And' -i /var/opt/mssql/data/beton.sql
+    #-i /var/opt/mssql/data/beton.sql
+    #command: tsql -C
   app:
     environment:
       PASSWORD: ${pass}
       PORT: ${port}
       USER: ${user}
       DB: ${name_db}
-      #PASSWORD: '12345And'
-      #PORT: "1433"
-      #USER: "SA"
-      #DB: "msdb"
+    #depends_on: 
+    #  - "baza"
+    #ports:
+    #  - "1434:1433"
+    #links:
+    #  - "baza"
     build:
       context: .
       #args:
       #  PASSWORD: "12345And"
     volumes:
-      - .:/app 
+      - .:/app
+      
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    depends_on:
+      - zookeeper
     

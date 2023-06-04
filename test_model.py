@@ -9,14 +9,33 @@ import os
 import configparser
 import pickle
 import sparse
-def test():
-    config = configparser.ConfigParser()
-    config.read('config.ini', encoding="utf-8")
+import pyodbc
+import post_process
+import kafka
+from kafka import KafkaProducer
 
-    path_data = config['DATA']['path_data']
-    test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
-    train = pd.read_csv('train.csv')
-    valid = pd.read_csv('valid.csv')
+def test():
+    #config = configparser.ConfigParser()
+    #config.read('config.ini', encoding="utf-8")
+    #path_data = config['DATA']['path_data']
+    #test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
+    #train = pd.read_csv('train.csv')
+    #valid = pd.read_csv('valid.csv')
+
+    password = os.environ['PASSWORD']
+    server = 'baza'
+    db = os.environ['DB']
+    user = os.environ['USER'] 
+    port = os.environ['PORT']
+    driver = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so'
+    server_kafka = 'kafka:29092'
+    conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
+    cursor = conn.cursor()
+
+    test = pd.read_sql("SELECT [ArticleId], [Text] FROM test.test;", conn)
+    train = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.train_split;", conn)
+    valid = pd.read_sql("SELECT [ArticleId], [Text], [Category] FROM test.valid_split;", conn)
+
     train_text = train['Text']
     valid_text = valid['Text']
     test_text = test['Text']
@@ -82,7 +101,11 @@ def test():
         submission_valid.append(class_names[index])
     valid_answer = {"text": list(valid['Text']),"Category":valid_target ,"labels": submission_valid}
     res = pd.DataFrame.from_dict(valid_answer)
-    res.to_csv('result_valid.csv', index = False)
+
+    client = KafkaProducer(bootstrap_servers = server_kafka, api_version=(0, 10, 1))
+    name_topic = 'pred_valid'
+    post_process.send_results(client, name_topic, res)
+
 
     submission_test = []
     for ind in range(len(result)):
@@ -90,7 +113,13 @@ def test():
         submission_test.append(class_names[index])
     test_answer = {"text": list(test['Text']), "labels": submission_test}
     res = pd.DataFrame.from_dict(test_answer)
-    res.to_csv('result.csv', index = False)
 
+    name_topic = 'pred_test'
+    post_process.send_results(client, name_topic, res)
 
+    consumer = kafka.KafkaConsumer(bootstrap_servers = server_kafka, auto_offset_reset = 'earliest')
+    post_process.send_to_baza(consumer, 'pred_valid', 'pred_valid', cursor)
+    post_process.send_to_baza(consumer, 'pred_test', 'pred_test', cursor)
+    cursor.close()
+    #res.to_csv('result.csv', index = False)
     print("Процесс тестирования модели завершился")
