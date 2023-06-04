@@ -26,15 +26,8 @@ def procces():
 	user = os.environ['USER'] 
 	port = os.environ['PORT']
 	driver = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so'
-	#
 	server_kafka = 'kafka:29092'
-	#time.sleep(1000000000)
-	
-	#conn = pyodbc.connect(DRIVER='/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so', 
-	#                   SERVER=server,
-	#                   DATABASE=db,
-	#                   UID=user,
-	#                   PWD=password)
+
 	print("Старт соеденения")
 	#conn = pyodbc.connect(DRIVER = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so', SERVER = 'baza', DATABASE = 'msdb', PORT = '1433', UID = 'sa', PWD = '12345And', TDS_Version = '7.2')
 	conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
