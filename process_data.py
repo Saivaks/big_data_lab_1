@@ -30,7 +30,7 @@ def procces():
 
 	print("Старт соеденения")
 	#conn = pyodbc.connect(DRIVER = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so', SERVER = 'baza', DATABASE = 'msdb', PORT = '1433', UID = 'sa', PWD = '12345And', TDS_Version = '7.2')
-	conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
+	conn = pyodbc.connect(DRIVER = driver, SERVER = str(server), DATABASE = str(db), PORT = str(port), UID = str(user), PWD = str(password))
 	#print(password)
 	#conn = pymssql.connect(server, user, password, db)
 	cursor = conn.cursor()
