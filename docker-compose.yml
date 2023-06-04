@@ -5,6 +5,7 @@ services:
     #container_name: fundament
     #image: microsoft/mssql-server-linux:2019-latest
     image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
     volumes:
       - ./data:/var/opt/mssql/data
     #expose:
