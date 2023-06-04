@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - "lab_3"
+      - "lab_4"
 
 jobs:
   build:
