@@ -43,7 +43,7 @@ def test():
     with open(pkl_filename, 'rb') as file:
         classifier = pickle.load(file)
     pkl_filename = "char_vectorizer.pkl"
-    with open(pkl_filename, 'rb', encoding="utf8",) as file:
+    with open(pkl_filename, 'r', encoding="utf8",) as file:
         char_vectorizer = pickle.load(file)
     pkl_filename = "word_vectorizer.pkl"
     with open(pkl_filename, 'rb') as file:
