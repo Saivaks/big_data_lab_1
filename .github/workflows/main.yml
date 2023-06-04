@@ -33,9 +33,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_SAIVAKS }}/test:latest
       -
+        name: Start docker
+        shell: bash
+        run: docker-compose up -d
+      -
         name: Run docker
         shell: bash
-        run: docker-compose up --build
+        run: docker-compose run app
+      - 
+        name: Stop docker
+        shell: bash
+        run: docker-compose down
         #name: Test cl
         #uses: ./.github/workflows/cd
         #with:
