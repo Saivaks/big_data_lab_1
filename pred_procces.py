@@ -12,7 +12,7 @@ def create_env():
 	port = os.environ['PORT']
 	driver = r'/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so'
 	server_kafka = 'kafka:29092'
-	time.sleep(10)
+	time.sleep(20)
 	print("Старт соеденения")
 	conn = pyodbc.connect(DRIVER = driver, SERVER = server, DATABASE = db, PORT = port, UID = user, PWD = password)
 	cursor = conn.cursor()
