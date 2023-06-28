@@ -1,8 +1,10 @@
 import pandas as pd
 import kafka
 
+server_kafka = 'kafka:29092'
 
-def send_results(producer, topic, df):
+def send_results(server_kafka, topic, df):
+	client = KafkaProducer(bootstrap_servers = server_kafka, api_version=(0, 10, 1))
     for index, row in df.iterrows():
         row = row.to_json().encode('utf-8')
         index = str(index).encode('utf-8')
@@ -31,7 +33,8 @@ def get_results(consumer, topic):
         dataframe = pd.DataFrame.from_dict(dict(data), orient = 'index', columns = columns)
     return dataframe
 
-def send_to_baza(consumer, topic, name_table, cursor):
+def send_to_baza(server_kafka, topic, name_table, cursor):
+	consumer = kafka.KafkaConsumer(bootstrap_servers = server_kafka, auto_offset_reset = 'earliest')
 	df = get_results(consumer, topic)
 	#print(df)
 	#df.to_sql(name_table, conn, schema = 'test', index=False, if_exists='replace')

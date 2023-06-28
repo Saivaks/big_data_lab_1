@@ -102,9 +102,8 @@ def test():
     valid_answer = {"text": list(valid['Text']),"Category":valid_target ,"labels": submission_valid}
     res = pd.DataFrame.from_dict(valid_answer)
 
-    client = KafkaProducer(bootstrap_servers = server_kafka, api_version=(0, 10, 1))
     name_topic = 'pred_valid'
-    post_process.send_results(client, name_topic, res)
+    post_process.send_results(server_kafka, name_topic, res)
 
 
     submission_test = []
@@ -115,11 +114,9 @@ def test():
     res = pd.DataFrame.from_dict(test_answer)
 
     name_topic = 'pred_test'
-    post_process.send_results(client, name_topic, res)
-
-    consumer = kafka.KafkaConsumer(bootstrap_servers = server_kafka, auto_offset_reset = 'earliest')
-    post_process.send_to_baza(consumer, 'pred_valid', 'pred_valid', cursor)
-    post_process.send_to_baza(consumer, 'pred_test', 'pred_test', cursor)
+    post_process.send_results(server_kafka, name_topic, res)
+    post_process.send_to_baza(server_kafka, 'pred_valid', 'pred_valid', cursor)
+    post_process.send_to_baza(server_kafka, 'pred_test', 'pred_test', cursor)
     cursor.close()
     #res.to_csv('result.csv', index = False)
     print("Процесс тестирования модели завершился")

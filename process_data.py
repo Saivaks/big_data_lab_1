@@ -57,18 +57,16 @@ def procces():
 	#cursor.commit()
 	print("Запись тестовых данных в кафку")
 	test = pd.read_csv(os.path.join(path_data, config['DATA']['name_test']))
-	client = KafkaProducer(bootstrap_servers = server_kafka, api_version=(0, 10, 1))
 	name_topic = 'test'
-	post_process.send_results(client, name_topic, test)
+	post_process.send_results(server_kafka, name_topic, test)
+
 	train, valid = np.split(train.sample(frac=1, random_state=322), [int(float(config['SPLIT_DATA']['size'])*len(train))])
 	print("Старт записи распличенных файлов в кафку")
-	client = KafkaProducer(bootstrap_servers = server_kafka, api_version = (0, 10, 1))
 	name_topic = 'train_split'
-	post_process.send_results(client, name_topic, train)
+	post_process.send_results(server_kafka, name_topic, train)
 
-	client = KafkaProducer(bootstrap_servers = server_kafka, api_version = (0, 10, 1))
 	name_topic = 'valid_split'
-	post_process.send_results(client, name_topic, valid)
+	post_process.send_results(server_kafka, name_topic, valid)
 	
 
 
