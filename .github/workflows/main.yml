@@ -3,11 +3,16 @@ name: ci
 on:
   push:
     branches:
-      - "main"
+      - "lab_3"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      user: ${{ secrets.BAZA_USER }}
+      port: ${{ secrets.OPEN_PORT }}
+      pass: ${{ secrets.BAZA_PASS }}
+      name_db: ${{ secrets.BAZA_DB }}
     steps:
       -
         name: Checkout
@@ -29,6 +34,30 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_SAIVAKS }}/test:latest
+      -
+        name: Start docker
+        shell: bash
+        run: docker-compose up -d
+      -
+        name: Run docker
+        shell: bash
+        run: docker-compose run app
       - 
-        name: Test cl
-        uses: ./.github/workflows/cd
+        name: Stop docker
+        shell: bash
+        run: docker-compose down
+        #name: Test cl
+        #uses: ./.github/workflows/cd
+        #with:
+        #  envkey_DEBUG: false
+        #  username_sec: ${{ secrets.MASTER_SLAVE}}
+        #  port_sec: ${{ secrets.OPEN_PORT}}
+        #  some_other_variable: foobar
+        # directory: <directory_name>
+        #  file_name: .env
+        #  fail_on_empty: false
+  #cl:
+  #  runs-on: ubuntu-latest
+    
+  #  steps:
+      

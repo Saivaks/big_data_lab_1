@@ -9,6 +9,9 @@ name: Test
 #jobs:
 runs:
   using: "composite"
+  env:
+    username: ${{ username_sec }}
+    port: ${{ port_sec }}
   #runs-on: ubuntu-latest
   steps:
   #- name: Checkout code
@@ -17,6 +20,9 @@ runs:
   - name: Run docker
     shell: bash
     run: docker-compose up --build
+    #with:
+    #  username: ${{ secrets.MASTER_SLAVE}}
+    #  port: ${{ secrets.OPEN_PORT}}
   #- name: Set up Python Environment
   #  shell: bash
   #  uses: actions/setup-python@v2
