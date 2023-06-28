@@ -33,7 +33,7 @@ def procces():
 	cursor = conn.cursor()
 	#cursor.execute('beton.sql')
 	print("Создается схема с таблицами")
-	with open('beton.sql') as f: 
+	with open(r'eto_baza/beton.sql') as f: 
 			sql = f.read()
 			#print(sql)
 			cursor.execute(sql)
